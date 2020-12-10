@@ -1,0 +1,68 @@
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+	<title>Transaction Home</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="/styles/master.css">
+
+	<script type="text/javascript" src="/scripts/master.js" defer></script>
+</head>
+
+<body>
+	<div class="header">
+		<h1 class="primary-message">Transaction Home</h1>
+    </div>
+
+	<div id="main" class="main">
+        <form action="/searchResult" method="POST">
+            <div class="inline-fields">
+                <input type="text" id="searchText" name="searchText" placeholder="look up code" th:value="${searchText}"><br>
+                <input type="submit" value="Search">
+            </div>
+        </form>
+
+        <div th:class="${isCartEmpty} ? '' : hidden">
+            <h4>There is no item in a cart.</h4>
+        </div>
+
+        <div th:class="${isCartEmpty} ? hidden : ''">
+        <div th:if="${isCartEmpty} == false">
+            <form action="/transaction" method="POST">
+                <table>
+                    <tr>
+                        <th>Look Up Code</th><th>Price</th><th>Quantity</th><th>Subtotal</th>
+                    </tr>
+                    <tr th:each="item : ${items}">
+                    <div th:if="${item.quantity} != 0">
+
+                        <input type="hidden" id="productId" name="productId" th:value="${item.product.id}">
+                        <th>
+                            <span th:text="${item.product.lookupCode}">lookupCode</span>
+                        </th>
+                        <th>
+                            <span th:text="${item.product.price}">0</span>
+                        </th>
+                        <th>
+                            <input type="number" name="quantity" th:value="${item.quantity}">
+                        </th>
+                        <th>
+                            <span th:text="${item.subtotal}">0</span>
+                        </th>
+                    </div>
+                    </tr>
+                </table>
+                <hr>
+                <div align="right">Total  <span th:text="${total}">0</span></div>
+                
+
+                <input type="submit" value="Apply changes">
+                <input type="submit" value="Check out" formaction="/checkout">
+            </form>
+            <form action="/cancelTransaction" method="GET">
+                <input type="submit" value="cancel transaction">
+            </form>
+        </div>
+        </div>
+    </div>
+</body>

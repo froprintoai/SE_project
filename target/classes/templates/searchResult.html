@@ -1,0 +1,55 @@
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+	<title>Search Result</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="/styles/master.css">
+
+	<script type="text/javascript" src="/scripts/master.js" defer></script>
+</head>
+
+<body>
+	<div class="header">
+		<h1 class="primary-message">Search Result</h1>
+    </div>
+
+	<div id="main" class="main">
+        <form action="/searchResult" method="POST">
+            <div class="inline-fields">
+                <input type="text" id="searchText" name="searchText" placeholder="look up code" th:value="${searchText}"><br>
+                <input type="submit" value="Search">
+            </div>
+        </form>
+
+
+        <div th:class="${noResult} ? '' : hidden">
+            <h4>There is no result.</h4>
+        </div>
+
+        <div th:class="${noResult} ? hidden : ''">
+        <div th:if="${noResult} == false">
+            <form action="/addToCart" method="POST">
+                <table>
+                    <tr>
+                        <th>Look Up Code</th><th>Price</th><th>Quantity</th>
+                    </tr>
+                    <tr th:each="product : ${products}">
+                        <input type="hidden" id="productId" name="productId" th:value="${product.id}">
+                        <th>
+                            <span th:text="${product.lookupCode}">lookupCode</span>
+                        </th>
+                        <th>
+                            <span th:text="${product.price}">0</span>
+                        </th>
+                        <th>
+                            <input type="number" id="quantity" name="quantity" value=0>
+                        </th>
+                    </tr>
+                </table>
+                <input type="submit" value="Add to cart">
+            </form>
+        </div>
+        </div>
+    </div>
+</body>
